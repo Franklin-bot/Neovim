@@ -11,14 +11,9 @@ local function setup()
 }
 end
 
-
-
-
-
 local M = {
     'nvim-treesitter/nvim-treesitter',
     config = setup
 }
-
 
 return M
