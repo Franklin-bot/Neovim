@@ -3,6 +3,7 @@ local function setup()
 
     local mode_width = 0
     local file_width = 0
+    local active = false
 
     -- coloring for active/inactive harpoon entry
     local function get_harpoon_indicator(index, harpoon_entry)
@@ -27,13 +28,17 @@ local function setup()
 
     local filename = {
         "filename",
+
+        symbols = {
+          modified = '',      -- Text to show when the file is modified.
+          readonly = '',      -- Text to show when the file is non-modifiable or readonly.
+          unnamed = '[No Name]', -- Text to show for unnamed buffers.
+       },
         fmt = function(str)
             file_width = #str
             return str
         end
         }
-
-
 
     local hll =
         {
@@ -53,16 +58,39 @@ local function setup()
             _separator = " ",
             no_harpoon = "Harpoon not loaded",
             fmt = function(str)
+                    local utils = require "harpoon-lualine.utils"
                     local harpoon = require("harpoon")
-                    local len = harpoon:list():length()
+
+                    local harpoon_entries = harpoon:list()
+                    local len = harpoon_entries:length()
                     local total_width = vim.opt.columns:get()
+                    local current_file_path = vim.api.nvim_buf_get_name(0)
+                    local root_dir = harpoon_entries.config:get_root_dir()
+
                     local multiplier = 3 + 0.5 * len
                     local padding = math.floor(total_width/2) - math.floor(#str/multiplier) - mode_width - file_width
-                    for i = 1, padding do
-                        str = " ".. str
+
+                    for i = 1, len do
+                        local harpoon_path = harpoon:list():get(i).value
+                        local full_path = nil
+                        if utils.is_relative_path(harpoon_path) then
+                            full_path = utils.get_full_path(root_dir, harpoon_path)
+                        else
+                            full_path = harpoon_path
+                        end
+
+                        if full_path == current_file_path or active == false then
+                            padding = padding - 1
+                            break
+                        end
                     end
+
+                    str = string.rep(" ", padding) .. str
                     return str
-                end
+                end,
+            cond = function()
+                return vim.opt.columns:get() > 100
+            end
         }
 
     local diff =
@@ -77,9 +105,6 @@ local function setup()
                     removed  = { fg = '#d0679d', bg = '#282c34' }, -- Red foreground, custom background
                 },
             }
-
-
-
 
 
     -- configure lualine
