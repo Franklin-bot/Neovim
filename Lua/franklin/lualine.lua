@@ -91,6 +91,7 @@ local function setup()
             cond = function()
                 return vim.opt.columns:get() > 100
             end
+
         }
 
     local diff =
