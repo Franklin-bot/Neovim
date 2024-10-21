@@ -1,9 +1,7 @@
 local function setup()
 
-
     local mode_width = 0
     local file_width = 0
-    local active = false
 
     -- coloring for active/inactive harpoon entry
     local function get_harpoon_indicator(index, harpoon_entry)
@@ -68,7 +66,8 @@ local function setup()
                     local root_dir = harpoon_entries.config:get_root_dir()
 
                     local multiplier = 3 + 0.5 * len
-                    local padding = math.floor(total_width/2) - math.floor(#str/multiplier) - mode_width - file_width
+                    local string_length = #str
+                    local padding = (math.floor(total_width/2) - math.floor(string_length/multiplier) - mode_width - file_width)
 
                     for i = 1, len do
                         local harpoon_path = harpoon:list():get(i).value
@@ -79,8 +78,7 @@ local function setup()
                             full_path = harpoon_path
                         end
 
-                        if full_path == current_file_path or active == false then
-                            padding = padding - 1
+                        if full_path == current_file_path then
                             break
                         end
                     end

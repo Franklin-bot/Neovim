@@ -1,11 +1,11 @@
 local function setup()
-    local poi = require "poimandres"
+    local poi = require "rose-pine"
     poi.setup()
-    vim.cmd.colorscheme "poimandres"
+    vim.cmd.colorscheme "rose-pine"
 end
 
 local M = {
-    'olivercederborg/poimandres.nvim',
+    'rose-pine/neovim',
     config = setup
 }
 
