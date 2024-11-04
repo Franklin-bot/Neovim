@@ -69,17 +69,19 @@ local function setup()
                     local string_length = #str
                     local padding = (math.floor(total_width/2) - math.floor(string_length/multiplier) - mode_width - file_width)
 
-                    for i = 1, len do
-                        local harpoon_path = harpoon:list():get(i).value
-                        local full_path = nil
-                        if utils.is_relative_path(harpoon_path) then
-                            full_path = utils.get_full_path(root_dir, harpoon_path)
-                        else
-                            full_path = harpoon_path
-                        end
+                    if len > 1 then
+                        for i = 1, len do
+                            local harpoon_path = harpoon:list():get(i).value
+                            local full_path = nil
+                            if utils.is_relative_path(harpoon_path) then
+                                full_path = utils.get_full_path(root_dir, harpoon_path)
+                            else
+                                full_path = harpoon_path
+                            end
 
-                        if full_path == current_file_path then
-                            break
+                            if full_path == current_file_path then
+                                break
+                            end
                         end
                     end
 
@@ -131,6 +133,7 @@ local function setup()
     }
     vim.cmd('highlight LualineActiveIndicator guifg=#d0679d')
     vim.cmd('highlight LualineInactiveIndicator guifg=#e4f0fb')
+    vim.cmd('set cmdheight=0')
 end
 
 local M = {
