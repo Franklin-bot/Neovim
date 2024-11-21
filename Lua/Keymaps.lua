@@ -1,6 +1,10 @@
 vim.g.mapleader = " "
 vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
 
+vim.keymap.set("i", "jj", "<Esc>")
+vim.keymap.set("v", "jj", "<Esc>")
+
+
 -- cmake remaps
 vim.keymap.set("n", "<leader>cg", ":CMakeGenerate<CR>")
 vim.keymap.set("n", "<leader>cb", ":CMakeBuild<CR>")

@@ -7,6 +7,8 @@ local function setup()
     require('neoscroll.config').set_mappings(t)
 end
 
+
+
 local M = {
   "karb94/neoscroll.nvim",
   config = setup
